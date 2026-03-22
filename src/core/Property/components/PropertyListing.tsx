@@ -1,4 +1,6 @@
+import { useNavigate } from "@tanstack/react-router"
 import { useGetPaginatedProperties } from "../service/Property.query"
+import type { PropertyFilters } from "../service/Property.query"
 import { PropertyCard } from "./PropertyCard"
 import type { Property } from "./PropertyCard"
 import { PropertySkeleton } from "./PropertySkeleton"
@@ -13,8 +15,19 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-const PropertyListing = () => {
-    const { data, isLoading, error } = useGetPaginatedProperties();
+interface PropertyListingProps {
+    filters: PropertyFilters;
+}
+
+const PropertyListing = ({ filters }: PropertyListingProps) => {
+    const navigate = useNavigate();
+    const { data, isLoading, error } = useGetPaginatedProperties(filters);
+
+    const handleFilterChange = (newFilters: PropertyFilters) => {
+        navigate({
+            search: newFilters as any
+        })
+    }
 
     // Safely cast data to Property[]
     const properties = (data as unknown as Property[]) || [];
@@ -26,7 +39,7 @@ const PropertyListing = () => {
     return (
         <div className="max-w-[1400px] mx-auto px-6 py-12 flex flex-col lg:flex-row gap-12 font-geist">
             {/* Sidebar Filter */}
-            <PropertyFilterSidebar />
+            <PropertyFilterSidebar onApply={handleFilterChange} />
 
             <main className="flex-1 space-y-10">
                 {/* Main Content Header */}

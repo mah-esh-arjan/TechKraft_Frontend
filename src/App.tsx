@@ -6,7 +6,7 @@ const PropertyListing = React.lazy(() => import('@core/components/PropertyListin
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <PropertyListing />
+      <PropertyListing filters={{}} />
     </Suspense>
   )
 }
