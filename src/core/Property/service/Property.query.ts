@@ -8,17 +8,24 @@ export interface PropertyFilters {
     beds?: number;
     baths?: number;
     type?: string;
-    suburb?: string;
     search?: string;
 }
 
-export const useGetPaginatedProperties = (filters?: PropertyFilters) => {
+export interface PaginationParams {
+    page: number;
+    limit: number;
+}
+
+export const useGetPaginatedProperties = (filters?: PropertyFilters, pagination?: PaginationParams) => {
     return useQuery({
-        queryKey: [propertyAPI.getPropertyListing.actionName, filters],
+        queryKey: [propertyAPI.getPropertyListing.actionName, filters, pagination],
 
         queryFn: async () => {
             const response = await axios.get(propertyAPI.getPropertyListing.controllerName, {
-                params: filters
+                params: {
+                    ...filters,
+                    ...pagination
+                }
             });
             return response.data;
         }

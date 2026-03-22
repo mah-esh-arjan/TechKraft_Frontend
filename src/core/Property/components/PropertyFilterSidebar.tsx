@@ -16,17 +16,26 @@ import type { PropertyFilters } from "../service/Property.query"
 
 interface PropertyFilterSidebarProps {
     onApply: (filters: PropertyFilters) => void;
+    localFilters: PropertyFilters;
+    setLocalFilters: (filters: PropertyFilters) => void;
+    handleResetFilter: () => void;
 }
 
-export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) => {
-    const [localFilters, setLocalFilters] = useState<PropertyFilters>({
-        beds: 1,
-        baths: 2,
-    });
+const initialFilters: PropertyFilters = {
+    minPrice: undefined,
+    maxPrice: undefined,
+    beds: undefined,
+    baths: undefined,
+    type: "",
+    search: ""
+};
+
+export const PropertyFilterSidebar = ({ onApply, localFilters, setLocalFilters, handleResetFilter }: PropertyFilterSidebarProps) => {
 
     const handleApply = () => {
         onApply(localFilters);
     };
+
 
     return (
         <aside className="w-full lg:w-64 flex-shrink-0 space-y-8 pr-6">
@@ -47,7 +56,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                     <div className="grid grid-cols-2 gap-2">
                         <Select
                             value={localFilters.minPrice?.toString()}
-                            onValueChange={(val) => setLocalFilters({ ...localFilters, minPrice: parseInt(val) })}
+                            onValueChange={(val) => setLocalFilters({ ...localFilters, minPrice: val ? parseInt(val) : initialFilters.minPrice })}
                         >
                             <SelectTrigger className="h-10 bg-slate-100 border-none rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors shadow-none px-3">
                                 <SelectValue placeholder="$500k" />
@@ -59,7 +68,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                         </Select>
                         <Select
                             value={localFilters.maxPrice?.toString()}
-                            onValueChange={(val) => setLocalFilters({ ...localFilters, maxPrice: parseInt(val) })}
+                            onValueChange={(val) => setLocalFilters({ ...localFilters, maxPrice: val ? parseInt(val) : initialFilters.maxPrice })}
                         >
                             <SelectTrigger className="h-10 bg-slate-100 border-none rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors shadow-none px-3">
                                 <SelectValue placeholder="$2M+" />
@@ -77,7 +86,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                     <ToggleGroup
                         type="single"
                         value={localFilters.beds?.toString()}
-                        onValueChange={(val) => setLocalFilters({ ...localFilters, beds: parseInt(val) })}
+                        onValueChange={(val) => setLocalFilters({ ...localFilters, beds: val ? parseInt(val) : initialFilters.beds })}
                         className="justify-start gap-2"
                     >
                         <ToggleGroupItem value="1" className="size-9 rounded-full bg-slate-100 border-none text-xs font-bold data-[state=on]:bg-[#ffd38d] data-[state=on]:text-slate-900 hover:bg-slate-200 shadow-none p-0 transition-all">1</ToggleGroupItem>
@@ -91,7 +100,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                     <ToggleGroup
                         type="single"
                         value={localFilters.baths?.toString()}
-                        onValueChange={(val) => setLocalFilters({ ...localFilters, baths: parseInt(val) })}
+                        onValueChange={(val) => setLocalFilters({ ...localFilters, baths: val ? parseInt(val) : initialFilters.baths })}
                         className="justify-start gap-2"
                     >
                         <ToggleGroupItem value="1" className="size-9 rounded-full bg-slate-100 border-none text-xs font-bold data-[state=on]:bg-[#ffd38d] data-[state=on]:text-slate-900 hover:bg-slate-200 shadow-none p-0 transition-all">1</ToggleGroupItem>
@@ -107,7 +116,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                             <Checkbox
                                 id="apartment"
                                 checked={localFilters.type === 'APARTMENT'}
-                                onCheckedChange={() => setLocalFilters({ ...localFilters, type: 'APARTMENT' })}
+                                onCheckedChange={(checked) => setLocalFilters({ ...localFilters, type: checked ? 'APARTMENT' : initialFilters.type })}
                                 className="size-4 rounded border-slate-300"
                             />
                             <label htmlFor="apartment" className="text-[11px] font-bold text-slate-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Apartment</label>
@@ -116,7 +125,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                             <Checkbox
                                 id="house"
                                 checked={localFilters.type === 'HOUSE'}
-                                onCheckedChange={() => setLocalFilters({ ...localFilters, type: 'HOUSE' })}
+                                onCheckedChange={(checked) => setLocalFilters({ ...localFilters, type: checked ? 'HOUSE' : initialFilters.type })}
                                 className="size-4 rounded border-slate-300"
                             />
                             <label htmlFor="house" className="text-[11px] font-bold text-slate-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">House</label>
@@ -125,7 +134,7 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                             <Checkbox
                                 id="villa"
                                 checked={localFilters.type === 'VILLA'}
-                                onCheckedChange={() => setLocalFilters({ ...localFilters, type: 'VILLA' })}
+                                onCheckedChange={(checked) => setLocalFilters({ ...localFilters, type: checked ? 'VILLA' : initialFilters.type })}
                                 className="size-4 rounded border-slate-300"
                             />
                             <label htmlFor="villa" className="text-[11px] font-bold text-slate-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Villa</label>
@@ -139,6 +148,13 @@ export const PropertyFilterSidebar = ({ onApply }: PropertyFilterSidebarProps) =
                 className="w-full h-12 bg-[#0c1621] hover:bg-[#1a2b3c] text-white rounded-xl font-bold text-xs tracking-wide shadow-none transition-all flex items-center justify-center"
             >
                 Apply Filters
+            </Button>
+            <Button
+                onClick={handleResetFilter}
+                variant={"default"}
+                className="w-full h-12 "
+            >
+                Reset Filters
             </Button>
         </aside>
     )

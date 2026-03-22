@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 interface PropertyListingProps {
     filters: PropertyFilters;
@@ -21,7 +22,24 @@ interface PropertyListingProps {
 
 const PropertyListing = ({ filters }: PropertyListingProps) => {
     const navigate = useNavigate();
-    const { data, isLoading, error } = useGetPaginatedProperties(filters);
+    const initialFilters: PropertyFilters = {
+        minPrice: undefined,
+        maxPrice: undefined,
+        beds: undefined,
+        baths: undefined,
+        type: "",
+        search: ""
+    };
+    const [localFilters, setLocalFilters] = useState<PropertyFilters>(initialFilters);
+
+    const handleResetFilter = () => {
+        setLocalFilters(initialFilters);
+        handleFilterChange(initialFilters);
+    }
+
+    const [pagination, setPagination] = useState({ page: 1, limit: 6 });
+    const { data, isLoading, error } = useGetPaginatedProperties(filters, pagination);
+
 
     const handleFilterChange = (newFilters: PropertyFilters) => {
         navigate({
@@ -39,7 +57,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
     return (
         <div className="max-w-[1400px] mx-auto px-6 py-12 flex flex-col lg:flex-row gap-12 font-geist">
             {/* Sidebar Filter */}
-            <PropertyFilterSidebar onApply={handleFilterChange} />
+            <PropertyFilterSidebar onApply={handleFilterChange} localFilters={localFilters} setLocalFilters={setLocalFilters} handleResetFilter={handleResetFilter} />
 
             <main className="flex-1 space-y-10">
                 {/* Main Content Header */}
@@ -85,8 +103,8 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                         <ChevronLeft className="size-4" />
                     </Button>
                     <div className="flex items-center gap-1">
-                        <Button className="h-10 w-10 bg-slate-900 text-white rounded-lg font-bold text-sm">1</Button>
-                        <Button variant="ghost" className="h-10 w-10 rounded-lg font-bold text-slate-500 text-sm hover:bg-slate-100">2</Button>
+                        <Button className="h-10 w-10 bg-slate-900 text-white rounded-lg font-bold text-sm" onClick={() => setPagination({ ...pagination, page: 1 })}>1</Button>
+                        <Button variant="ghost" className="h-10 w-10 rounded-lg font-bold text-slate-500 text-sm hover:bg-slate-100" onClick={() => setPagination({ ...pagination, page: 2 })}>2</Button>
                         <Button variant="ghost" className="h-10 w-10 rounded-lg font-bold text-slate-500 text-sm hover:bg-slate-100">3</Button>
                         <span className="px-2 text-slate-300 italic">...</span>
                     </div>
@@ -94,8 +112,8 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                         <ChevronRight className="size-4" />
                     </Button>
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     )
 }
 
