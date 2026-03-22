@@ -11,7 +11,7 @@ export interface Property {
   price: number
   beds: number
   baths: number
-  type: 'HOUSE' | 'APARTMENT' | 'CONDO' | 'TOWNHOUSE'
+  type: 'HOUSE' | 'APARTMENT' | 'VILLA'
   suburb: string
   agentId: number
   createdAt: string
@@ -28,21 +28,30 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
     maximumFractionDigits: 0,
   }).format(property.price)
 
+  const getPropertyImage = (type: Property['type']) => {
+    switch (type) {
+      case 'APARTMENT':
+        return '/Apartment.jpeg'
+      case 'HOUSE':
+        return '/house.jpeg'
+      case 'VILLA':
+        return '/Villa.jpeg'
+      default:
+        return '/house.jpeg'
+    }
+  }
+
   return (
     <Card className="group overflow-hidden border-none shadow-none bg-transparent hover:translate-y-[-4px] transition-transform duration-300">
       <div className="relative rounded-xl overflow-hidden mb-4">
         <AspectRatio ratio={4 / 3}>
           <img
-            src={`https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=800&auto=format&fit=crop`}
+            src={getPropertyImage(property.type)}
             alt={property.name}
             className="object-cover w-full h-full"
           />
         </AspectRatio>
-        {property.price > 3000000 && (
-          <Badge className="absolute top-4 left-4 bg-white/90 text-slate-900 border-none uppercase text-[10px] font-bold tracking-widest px-3 py-1 backdrop-blur-sm">
-            Featured
-          </Badge>
-        )}
+
       </div>
 
       <div className="space-y-2">
