@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router"
 import { useGetPaginatedProperties } from "../service/Property.query"
 import type { PropertyFilters } from "../service/Property.query"
 import { PropertyCard } from "./PropertyCard"
-import type { Property } from "./PropertyCard"
 import { PropertySkeleton } from "./PropertySkeleton"
 import { PropertyFilterSidebar } from "./PropertyFilterSidebar"
 import {
@@ -47,8 +46,8 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
         })
     }
 
-    // Safely cast data to Property[]
-    const properties = (data as unknown as Property[]) || [];
+    // Safely access data items
+    const properties = data?.items || [];
 
     if (error) {
         return <div className="p-20 text-center font-bold text-red-500">Error: {error.message}</div>
@@ -99,16 +98,37 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
 
                 {/* Pagination */}
                 <div className="flex items-center justify-center gap-2 pt-10">
-                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-lg hover:bg-slate-100">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-lg hover:bg-slate-100"
+                        disabled={pagination.page <= 1}
+                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+                    >
                         <ChevronLeft className="size-4" />
                     </Button>
                     <div className="flex items-center gap-1">
-                        <Button className="h-10 w-10 bg-slate-900 text-white rounded-lg font-bold text-sm" onClick={() => setPagination({ ...pagination, page: 1 })}>1</Button>
-                        <Button variant="ghost" className="h-10 w-10 rounded-lg font-bold text-slate-500 text-sm hover:bg-slate-100" onClick={() => setPagination({ ...pagination, page: 2 })}>2</Button>
-                        <Button variant="ghost" className="h-10 w-10 rounded-lg font-bold text-slate-500 text-sm hover:bg-slate-100">3</Button>
-                        <span className="px-2 text-slate-300 italic">...</span>
+                        {Array.from({ length: data?.totalPages || 0 }, (_, i) => (
+                            <Button
+                                key={i + 1}
+                                className={`h-10 w-10 rounded-lg font-bold text-sm ${pagination.page === i + 1
+                                    ? "bg-slate-900 text-white"
+                                    : "bg-transparent text-slate-500 hover:bg-slate-100"
+                                    }`}
+                                variant={pagination.page === i + 1 ? "default" : "ghost"}
+                                onClick={() => setPagination(prev => ({ ...prev, page: i + 1 }))}
+                            >
+                                {i + 1}
+                            </Button>
+                        ))}
                     </div>
-                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-lg hover:bg-slate-100">
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-10 w-10 rounded-lg hover:bg-slate-100"
+                        disabled={pagination.page >= (data?.totalPages || 0)}
+                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+                    >
                         <ChevronRight className="size-4" />
                     </Button>
                 </div>

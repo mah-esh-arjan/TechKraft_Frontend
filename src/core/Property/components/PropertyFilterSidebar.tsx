@@ -2,13 +2,7 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Search } from "lucide-react"
@@ -51,34 +45,21 @@ export const PropertyFilterSidebar = ({ onApply, localFilters, setLocalFilters, 
             </div>
 
             <div className="space-y-5">
-                <div className="space-y-2.5">
-                    <Label className="uppercase text-[9px] font-bold text-slate-400 tracking-[0.2em]">Price Range</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Select
-                            value={localFilters.minPrice?.toString()}
-                            onValueChange={(val) => setLocalFilters({ ...localFilters, minPrice: val ? parseInt(val) : initialFilters.minPrice })}
-                        >
-                            <SelectTrigger className="h-10 bg-slate-100 border-none rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors shadow-none px-3">
-                                <SelectValue placeholder="$500k" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="500000">$500,000</SelectItem>
-                                <SelectItem value="1000000">$1,000,000</SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <Select
-                            value={localFilters.maxPrice?.toString()}
-                            onValueChange={(val) => setLocalFilters({ ...localFilters, maxPrice: val ? parseInt(val) : initialFilters.maxPrice })}
-                        >
-                            <SelectTrigger className="h-10 bg-slate-100 border-none rounded-lg text-xs font-semibold hover:bg-slate-200 transition-colors shadow-none px-3">
-                                <SelectValue placeholder="$2M+" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="2000000">$2,000,000+</SelectItem>
-                                <SelectItem value="5000000">$5,000,000+</SelectItem>
-                            </SelectContent>
-                        </Select>
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <Label className="uppercase text-[9px] font-bold text-slate-400 tracking-[0.2em]">Price Range</Label>
+                        <span className="text-[10px] font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-full">
+                            ${(localFilters.minPrice || 0).toLocaleString()} - ${(localFilters.maxPrice || 2000000).toLocaleString()}+
+                        </span>
                     </div>
+                    <Slider
+                        value={[localFilters.minPrice || 0, localFilters.maxPrice || 2000000]}
+                        min={0}
+                        max={2000000}
+                        step={50000}
+                        onValueChange={([min, max]: number[]) => setLocalFilters({ ...localFilters, minPrice: min, maxPrice: max })}
+                        className="py-2"
+                    />
                 </div>
 
                 <div className="space-y-2.5">
