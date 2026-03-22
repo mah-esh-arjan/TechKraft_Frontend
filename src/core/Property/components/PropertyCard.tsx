@@ -53,20 +53,20 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
           {property.name}, {property.suburb}
         </div>
 
-        <div className="flex flex-col p-4 items-start gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+        <div className="flex flex-col p-4 gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest">
           <div className="flex justify-between gap-1">
             <span className="opacity-60">Beds</span>
             <span>{property.beds}</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex justify-between gap-1">
             <span className="opacity-60">Baths</span>
             <span>{property.baths}</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex justify-between gap-1">
             <span className="opacity-60">Property</span>
             <span>{property.type}</span>
           </div>
-          <div className="flex items-center gap-1 ">
+          <div className="flex justify-between gap-1 ">
             <span className="opacity-60">Suburb</span>
             <span>{property.suburb}</span>
           </div>

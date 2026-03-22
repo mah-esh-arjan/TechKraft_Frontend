@@ -3,12 +3,12 @@ import { PropertyCard } from "./PropertyCard"
 import type { Property } from "./PropertyCard"
 import { PropertySkeleton } from "./PropertySkeleton"
 import { PropertyFilterSidebar } from "./PropertyFilterSidebar"
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
 } from "@/components/ui/select"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,7 @@ const PropertyListing = () => {
                         </div>
                         <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Luxury Listings</h2>
                     </div>
-                    
+
                     <div className="flex items-center gap-3">
                         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sort:</span>
                         <Select defaultValue="newest">
@@ -55,11 +55,11 @@ const PropertyListing = () => {
 
                 {/* Listings Grid */}
                 {isLoading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-14">
                         {[1, 2, 3, 4].map(i => <PropertySkeleton key={i} />)}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-14">
                         {properties.map((property) => (
                             <PropertyCard key={property.id} property={property} />
                         ))}
