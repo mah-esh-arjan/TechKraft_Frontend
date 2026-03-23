@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { propertyAPI } from './Property.api'
-import axios from 'axios';
+import api from '@/lib/axios';
 import type { Property } from '../components/PropertyCard';
 
 export interface PaginatedPropertyResponse {
@@ -30,7 +30,7 @@ export const useGetPaginatedProperties = (filters?: PropertyFilters, pagination?
         queryKey: [propertyAPI.getPropertyListing.actionName, filters, pagination],
 
         queryFn: async () => {
-            const response = await axios.get(propertyAPI.getPropertyListing.controllerName, {
+            const response = await api.get(propertyAPI.getPropertyListing.controllerName, {
                 params: {
                     ...filters,
                     ...pagination
@@ -46,7 +46,7 @@ export const useGetPropertyDetail = (id: number) => {
         queryKey: [propertyAPI.getPropertyDetail.actionName, id],
 
         queryFn: async () => {
-            const response = await axios.get(propertyAPI.getPropertyDetail.controllerName.replace(":id", id.toString()));
+            const response = await api.get(propertyAPI.getPropertyDetail.controllerName.replace(":id", id.toString()));
 
             return response.data;
         }

@@ -93,10 +93,10 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                                 <SelectValue placeholder="10" />
                             </SelectTrigger>
                             <SelectContent className="bg-white border-slate-100 rounded-xl">
-                                <SelectItem value="10">10 Per Page</SelectItem>
-                                <SelectItem value="20">20 Per Page</SelectItem>
-                                <SelectItem value="30">30 Per Page</SelectItem>
-                                <SelectItem value="40">40 Per Page</SelectItem>
+                                <SelectItem value="10">10 </SelectItem>
+                                <SelectItem value="20">20 </SelectItem>
+                                <SelectItem value="30">30 </SelectItem>
+                                <SelectItem value="40">40 </SelectItem>
                                 <SelectItem value="100">Show All</SelectItem>
                             </SelectContent>
                         </Select>
