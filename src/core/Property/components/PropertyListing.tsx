@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 
 interface PropertyListingProps {
-    filters: PropertyFilters;
+    filters: PropertyFilters & { page?: number; limit?: number };
 }
 
 const PropertyListing = ({ filters }: PropertyListingProps) => {
@@ -36,13 +36,28 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
         handleFilterChange(initialFilters);
     }
 
-    const [pagination, setPagination] = useState({ page: 1, limit: 6 });
-    const { data, isLoading, error } = useGetPaginatedProperties(filters, pagination);
+    const pagination = {
+        page: filters.page || 1,
+        limit: filters.limit || 10
+    };
 
+    const { data, isLoading, error } = useGetPaginatedProperties(filters, pagination);
 
     const handleFilterChange = (newFilters: PropertyFilters) => {
         navigate({
-            search: newFilters as any
+            search: { ...newFilters, page: 1, limit: pagination.limit } as any
+        })
+    }
+
+    const handleLimitChange = (newLimit: number) => {
+        navigate({
+            search: { ...filters, limit: newLimit, page: 1 } as any
+        })
+    }
+
+    const handlePageChange = (newPage: number) => {
+        navigate({
+            search: { ...filters, page: newPage } as any
         })
     }
 
@@ -69,15 +84,20 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Sort:</span>
-                        <Select defaultValue="newest">
-                            <SelectTrigger className="w-[180px] h-11 bg-slate-50 border-none rounded-xl text-xs font-bold shadow-none ring-offset-transparent focus:ring-0">
-                                <SelectValue placeholder="Newest First" />
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Show:</span>
+                        <Select 
+                            value={pagination.limit.toString()} 
+                            onValueChange={(val) => handleLimitChange(Number(val))}
+                        >
+                            <SelectTrigger className="w-[100px] h-11 bg-slate-50 border-none rounded-xl text-xs font-bold shadow-none ring-offset-transparent focus:ring-0">
+                                <SelectValue placeholder="10" />
                             </SelectTrigger>
                             <SelectContent className="bg-white border-slate-100 rounded-xl">
-                                <SelectItem value="newest">Newest First</SelectItem>
-                                <SelectItem value="price-asc">Price: Low to High</SelectItem>
-                                <SelectItem value="price-desc">Price: High to Low</SelectItem>
+                                <SelectItem value="10">10 Per Page</SelectItem>
+                                <SelectItem value="20">20 Per Page</SelectItem>
+                                <SelectItem value="30">30 Per Page</SelectItem>
+                                <SelectItem value="40">40 Per Page</SelectItem>
+                                <SelectItem value="100">Show All</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -86,7 +106,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                 {/* Listings Grid */}
                 {isLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-14">
-                        {[1, 2, 3, 4].map(i => <PropertySkeleton key={i} />)}
+                        {[1, 2, 3, 4, 5, 6].map(i => <PropertySkeleton key={i} />)}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-14">
@@ -103,7 +123,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                         size="icon"
                         className="h-10 w-10 rounded-lg hover:bg-slate-100"
                         disabled={pagination.page <= 1}
-                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+                        onClick={() => handlePageChange(pagination.page - 1)}
                     >
                         <ChevronLeft className="size-4" />
                     </Button>
@@ -116,7 +136,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                                     : "bg-transparent text-slate-500 hover:bg-slate-100"
                                     }`}
                                 variant={pagination.page === i + 1 ? "default" : "ghost"}
-                                onClick={() => setPagination(prev => ({ ...prev, page: i + 1 }))}
+                                onClick={() => handlePageChange(i + 1)}
                             >
                                 {i + 1}
                             </Button>
@@ -127,7 +147,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                         size="icon"
                         className="h-10 w-10 rounded-lg hover:bg-slate-100"
                         disabled={pagination.page >= (data?.totalPages || 0)}
-                        onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+                        onClick={() => handlePageChange(pagination.page + 1)}
                     >
                         <ChevronRight className="size-4" />
                     </Button>

@@ -1,8 +1,10 @@
 import {
   Card
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { Link } from '@tanstack/react-router'
+import { Button } from '@/components/ui/button'
+import { ArrowUpRight } from 'lucide-react'
 
 export interface Property {
   id: number
@@ -51,18 +53,25 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
             className="object-cover w-full h-full"
           />
         </AspectRatio>
-
       </div>
 
       <div className="space-y-2">
-        <div className="text-2xl font-bold text-slate-900 leading-tight tracking-tight">
-          {formattedPrice}
+        <div className="flex items-center justify-between">
+          <div className="text-2xl font-bold text-slate-900 leading-tight tracking-tight">
+            {formattedPrice}
+          </div>
+          <Link to="/listing/$id" params={{ id: property.id.toString() }}>
+            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-100/50 hover:bg-slate-900 hover:text-white transition-all">
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </div>
+        
         <div className="text-xs font-medium text-slate-500 uppercase tracking-widest line-clamp-1">
           {property.name}, {property.suburb}
         </div>
 
-        <div className="flex flex-col p-4 gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest">
+        <div className="flex flex-col p-4 gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest bg-slate-50/50 rounded-xl mt-2">
           <div className="flex justify-between gap-1">
             <span className="opacity-60">Beds</span>
             <span>{property.beds}</span>
@@ -75,11 +84,13 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
             <span className="opacity-60">Property</span>
             <span>{property.type}</span>
           </div>
-          <div className="flex justify-between gap-1 ">
-            <span className="opacity-60">Suburb</span>
-            <span>{property.suburb}</span>
-          </div>
         </div>
+
+        <Link to="/listing/$id" params={{ id: property.id.toString() }} className="block pt-2">
+          <Button className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-900 border-none text-slate-700 hover:text-white font-bold text-xs uppercase tracking-widest transition-all shadow-none">
+            View Details
+          </Button>
+        </Link>
       </div>
     </Card>
   )

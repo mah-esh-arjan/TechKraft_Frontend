@@ -40,3 +40,15 @@ export const useGetPaginatedProperties = (filters?: PropertyFilters, pagination?
         }
     })
 }
+
+export const useGetPropertyDetail = (id: number) => {
+    return useQuery({
+        queryKey: [propertyAPI.getPropertyDetail.actionName, id],
+
+        queryFn: async () => {
+            const response = await axios.get(propertyAPI.getPropertyDetail.controllerName.replace(":id", id.toString()));
+
+            return response.data;
+        }
+    })
+}

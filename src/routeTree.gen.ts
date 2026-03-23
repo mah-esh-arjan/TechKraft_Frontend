@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ListingIndexRouteImport } from './routes/listing/index'
+import { Route as ListingIdRouteImport } from './routes/listing/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ListingIndexRoute = ListingIndexRouteImport.update({
+  id: '/listing/',
+  path: '/listing/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingIdRoute = ListingIdRouteImport.update({
+  id: '/listing/$id',
+  path: '/listing/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/listing/': typeof ListingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/listing': typeof ListingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/listing/': typeof ListingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/listing/$id' | '/listing/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/listing/$id' | '/listing'
+  id: '__root__' | '/' | '/listing/$id' | '/listing/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ListingIdRoute: typeof ListingIdRoute
+  ListingIndexRoute: typeof ListingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/listing/': {
+      id: '/listing/'
+      path: '/listing'
+      fullPath: '/listing/'
+      preLoaderRoute: typeof ListingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listing/$id': {
+      id: '/listing/$id'
+      path: '/listing/$id'
+      fullPath: '/listing/$id'
+      preLoaderRoute: typeof ListingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ListingIdRoute: ListingIdRoute,
+  ListingIndexRoute: ListingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
