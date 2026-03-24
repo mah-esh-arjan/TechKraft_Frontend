@@ -22,7 +22,7 @@ export const LoginForm = () => {
 
     try {
       const { data } = await api.post('/login', { email });
-      auth.set(data.id);
+      auth.set(data.agent.id);
       await queryClient.invalidateQueries({ queryKey: [propertyAPI.getPropertyListing.actionName] });
       navigate({ to: '/listing', search: { page: 1, limit: 10 } });
     } catch {
