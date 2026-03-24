@@ -11,8 +11,14 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from "@/components/ui/pagination"
 import { useState } from "react"
 
 interface PropertyListingProps {
@@ -117,41 +123,39 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                 )}
 
                 {/* Pagination */}
-                <div className="flex items-center justify-center gap-2 pt-10">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 rounded-lg hover:bg-slate-100"
-                        disabled={pagination.page <= 1}
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                    >
-                        <ChevronLeft className="size-4" />
-                    </Button>
-                    <div className="flex items-center gap-1">
-                        {Array.from({ length: data?.totalPages || 0 }, (_, i) => (
-                            <Button
-                                key={i + 1}
-                                className={`h-10 w-10 rounded-lg font-bold text-sm ${pagination.page === i + 1
-                                    ? "bg-slate-900 text-white"
-                                    : "bg-transparent text-slate-500 hover:bg-slate-100"
-                                    }`}
-                                variant={pagination.page === i + 1 ? "default" : "ghost"}
-                                onClick={() => handlePageChange(i + 1)}
-                            >
-                                {i + 1}
-                            </Button>
-                        ))}
-                    </div>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-10 w-10 rounded-lg hover:bg-slate-100"
-                        disabled={pagination.page >= (data?.totalPages || 0)}
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                    >
-                        <ChevronRight className="size-4" />
-                    </Button>
-                </div>
+                <Pagination className="pt-10">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious 
+                                onClick={() => pagination.page > 1 && handlePageChange(pagination.page - 1)}
+                                className={pagination.page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                            />
+                        </PaginationItem>
+                        
+                        {Array.from({ length: data?.totalPages || 0 }, (_, i) => {
+                            const pageNum = i + 1;
+                            return (
+                                <PaginationItem key={pageNum}>
+                                    <PaginationLink 
+                                        isActive={pagination.page === pageNum}
+                                        onClick={() => handlePageChange(pageNum)}
+                                        className="cursor-pointer"
+                                    >
+                                        {pageNum}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            )
+                        })}
+
+                        <PaginationItem>
+                            <PaginationNext 
+                                onClick={() => pagination.page < (data?.totalPages || 0) && handlePageChange(pagination.page + 1)}
+                                className={pagination.page >= (data?.totalPages || 0) ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+
             </main >
         </div >
     )

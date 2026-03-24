@@ -5,30 +5,14 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { ArrowUpRight } from 'lucide-react'
-
-export interface Property {
-  id: number
-  name: string
-  description: string
-  price: number
-  beds: number
-  baths: number
-  type: 'HOUSE' | 'APARTMENT' | 'VILLA'
-  suburb: string
-  agentId: number
-  createdAt: string
-}
+import type { Property } from '../types'
+import { AdminPropertyMeta } from './AdminPropertyMeta'
 
 interface PropertyCardProps {
   property: Property
 }
 
 export const PropertyCard = ({ property }: PropertyCardProps) => {
-  const formattedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(property.price)
 
   const getPropertyImage = (type: Property['type']) => {
     switch (type) {
@@ -58,7 +42,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-slate-900 leading-tight tracking-tight">
-            {formattedPrice}
+            ${property.price}
           </div>
           <Link to="/listing/$id" params={{ id: property.id.toString() }}>
             <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full bg-slate-100/50 hover:bg-slate-900 hover:text-white transition-all">
@@ -66,11 +50,14 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
             </Button>
           </Link>
         </div>
-        
-        <div className="text-xs font-medium text-slate-500 uppercase tracking-widest line-clamp-1">
-          {property.name}, {property.suburb}
+
+        <div className="text-base font-medium text-slate-500 uppercase tracking-widest line-clamp-1">
+          {property.name}
         </div>
 
+        <div className='flex text-xs justify-center '>
+          {property.suburb}
+        </div>
         <div className="flex flex-col p-4 gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest bg-slate-50/50 rounded-xl mt-2">
           <div className="flex justify-between gap-1">
             <span className="opacity-60">Beds</span>
@@ -86,12 +73,16 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
           </div>
         </div>
 
+        <AdminPropertyMeta metaData={property.metaData} />
+
+
+
         <Link to="/listing/$id" params={{ id: property.id.toString() }} className="block pt-2">
           <Button className="w-full h-11 rounded-xl bg-slate-100 hover:bg-slate-900 border-none text-slate-700 hover:text-white font-bold text-xs uppercase tracking-widest transition-all shadow-none">
             View Details
           </Button>
         </Link>
       </div>
-    </Card>
+    </Card >
   )
 }

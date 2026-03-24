@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { propertyAPI } from './Property.api'
 import api from '@/lib/axios';
-import type { Property } from '../components/PropertyCard';
+import type { Property } from '../types';
 
 export interface PaginatedPropertyResponse {
     items: Property[];

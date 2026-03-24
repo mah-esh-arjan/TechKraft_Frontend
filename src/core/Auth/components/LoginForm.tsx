@@ -16,10 +16,10 @@ export const LoginForm = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const { data } = await api.post('/login', { email });
-      auth.set(data.id, data.isAdmin);
+      auth.set(data.id);
       navigate({ to: '/listing', search: { page: 1, limit: 10 } });
     } catch {
       setError('Login failed');

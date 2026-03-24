@@ -1,8 +1,8 @@
 const AUTH_KEY = 'auth';
 
 export const auth = {
-  set: (id: string, isAdmin: boolean) => {
-    localStorage.setItem(AUTH_KEY, JSON.stringify({ id, isAdmin }));
+  set: (id: string) => {
+    localStorage.setItem(AUTH_KEY, JSON.stringify({ id }));
   },
 
   get: () => {
@@ -12,5 +12,5 @@ export const auth = {
 
   clear: () => localStorage.removeItem(AUTH_KEY),
 
-  isAdmin: () => auth.get()?.isAdmin || false
+  isAdmin: () => auth.get()?.id ? true : false
 };
