@@ -5,14 +5,9 @@ import { Slider } from "@/components/ui/slider"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Search } from "lucide-react"
-import type { PropertyFilters } from "../service/Property.query"
+import type { PropertyFilters } from "../schema"
+import type { PropertyFilterSidebarProps } from "../schema/property.interface"
 
-interface PropertyFilterSidebarProps {
-    onApply: (filters: PropertyFilters) => void;
-    localFilters: PropertyFilters;
-    setLocalFilters: (filters: PropertyFilters) => void;
-    handleResetFilter: () => void;
-}
 
 const initialFilters: PropertyFilters = {
     minPrice: undefined,
@@ -65,7 +60,7 @@ export const PropertyFilterSidebar = ({ onApply, localFilters, setLocalFilters, 
                     <Label className="uppercase text-[9px] font-bold text-slate-400 tracking-[0.2em]">Bedrooms</Label>
                     <ToggleGroup
                         type="single"
-                        value={localFilters.beds?.toString()}
+                        value={localFilters.beds?.toString() ?? ""}
                         onValueChange={(val) => setLocalFilters({ ...localFilters, beds: val ? parseInt(val) : initialFilters.beds })}
                         className="justify-start gap-2"
                     >
@@ -79,7 +74,7 @@ export const PropertyFilterSidebar = ({ onApply, localFilters, setLocalFilters, 
                     <Label className="uppercase text-[9px] font-bold text-slate-400 tracking-[0.2em]">Bathrooms</Label>
                     <ToggleGroup
                         type="single"
-                        value={localFilters.baths?.toString()}
+                        value={localFilters.baths?.toString() ?? ""}
                         onValueChange={(val) => setLocalFilters({ ...localFilters, baths: val ? parseInt(val) : initialFilters.baths })}
                         className="justify-start gap-2"
                     >

@@ -1,10 +1,10 @@
 import { useNavigate } from "@tanstack/react-router"
 import { useGetPaginatedProperties } from "../service/Property.query"
-import type { PropertyFilters } from "../service/Property.query"
-import type { PropertySearchParams } from "@/routes/listing/index"
+import type { PropertyFilters } from "../schema"
 import { PropertyCard } from "./PropertyCard"
 import { PropertySkeleton } from "./PropertySkeleton"
 import { PropertyFilterSidebar } from "./PropertyFilterSidebar"
+import type { PropertyListingProps } from "../schema/property.interface"
 import {
     Select,
     SelectContent,
@@ -22,9 +22,6 @@ import {
 } from "@/components/ui/pagination"
 import { useState } from "react"
 
-interface PropertyListingProps {
-    filters: PropertySearchParams;
-}
 
 const PropertyListing = ({ filters }: PropertyListingProps) => {
     const navigate = useNavigate();
@@ -89,16 +86,15 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                 {/* Main Content Header */}
                 <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                     <div className="space-y-1">
-                        <div className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.3em]">
+                        <div className="text-[11px] font-bold uppercase ">
                             Showing {properties.length} Properties
                         </div>
-                        <h2 className="text-4xl font-bold text-slate-900 tracking-tight">Luxury Listings</h2>
                     </div>
 
                     <div className="flex items-center gap-3">
                         <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Show:</span>
-                        <Select 
-                            value={pagination.limit.toString()} 
+                        <Select
+                            value={pagination.limit.toString()}
                             onValueChange={(val) => handleLimitChange(Number(val))}
                         >
                             <SelectTrigger className="w-[100px] h-11 bg-slate-50 border-none rounded-xl text-xs font-bold shadow-none ring-offset-transparent focus:ring-0">
@@ -132,17 +128,17 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                 <Pagination className="pt-10">
                     <PaginationContent>
                         <PaginationItem>
-                            <PaginationPrevious 
+                            <PaginationPrevious
                                 onClick={() => pagination.page > 1 && handlePageChange(pagination.page - 1)}
                                 className={pagination.page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
                             />
                         </PaginationItem>
-                        
+
                         {Array.from({ length: data?.totalPages || 0 }, (_, i) => {
                             const pageNum = i + 1;
                             return (
                                 <PaginationItem key={pageNum}>
-                                    <PaginationLink 
+                                    <PaginationLink
                                         isActive={pagination.page === pageNum}
                                         onClick={() => handlePageChange(pageNum)}
                                         className="cursor-pointer"
@@ -154,7 +150,7 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
                         })}
 
                         <PaginationItem>
-                            <PaginationNext 
+                            <PaginationNext
                                 onClick={() => pagination.page < (data?.totalPages || 0) && handlePageChange(pagination.page + 1)}
                                 className={pagination.page >= (data?.totalPages || 0) ? "pointer-events-none opacity-50" : "cursor-pointer"}
                             />

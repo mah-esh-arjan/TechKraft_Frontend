@@ -5,12 +5,9 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { ArrowUpRight } from 'lucide-react'
-import type { Property } from '../types'
+import type { PropertyCardProps } from '../schema/property.interface'
+import type { Property } from '../schema'
 import { AdminPropertyMeta } from './AdminPropertyMeta'
-
-interface PropertyCardProps {
-  property: Property
-}
 
 export const PropertyCard = ({ property }: PropertyCardProps) => {
 
@@ -39,7 +36,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
         </AspectRatio>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 px-2">
         <div className="flex items-center justify-between">
           <div className="text-2xl font-bold text-slate-900 leading-tight tracking-tight">
             ${property.price}
@@ -56,7 +53,7 @@ export const PropertyCard = ({ property }: PropertyCardProps) => {
         </div>
 
         <div className='flex text-xs justify-center '>
-          {property.suburb}
+          Suburb {property.suburb}
         </div>
         <div className="flex flex-col p-4 gap-3 pt-3 text-slate-500 font-bold uppercase text-[10px] tracking-widest bg-slate-50/50 rounded-xl mt-2">
           <div className="flex justify-between gap-1">

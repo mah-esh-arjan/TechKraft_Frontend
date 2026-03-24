@@ -1,9 +1,5 @@
 import { auth } from '@/lib/auth'
-import type { PropertyMetaData } from '../types'
-
-interface AdminPropertyMetaProps {
-  metaData?: PropertyMetaData
-}
+import type { AdminPropertyMetaProps } from '../schema/property.interface'
 
 export const AdminPropertyMeta = ({ metaData }: AdminPropertyMetaProps) => {
   // Use auth.isAdmin to short-circuit the component

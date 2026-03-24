@@ -82,7 +82,7 @@ export const PropertyDetail = () => {
                 {/* Main Details */}
                 <div className="lg:col-span-3 space-y-6">
                     <div className="space-y-2">
-                        <h1 className="text-2xl font-bold text-slate-900 tracking-tight leading-snug">
+                        <h1 className="text-2xl font-bold">
                             {property.name}
                         </h1>
                         <div className="flex items-center text-slate-500 font-medium text-sm">

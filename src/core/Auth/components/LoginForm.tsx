@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/lib/axios';
 import { auth } from '@/lib/auth';
+import { propertyAPI } from '@/core/Property/service/Property.api';
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,6 +23,7 @@ export const LoginForm = () => {
     try {
       const { data } = await api.post('/login', { email });
       auth.set(data.id);
+      await queryClient.invalidateQueries({ queryKey: [propertyAPI.getPropertyListing.actionName] });
       navigate({ to: '/listing', search: { page: 1, limit: 10 } });
     } catch {
       setError('Login failed');
