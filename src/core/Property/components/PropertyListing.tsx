@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router"
 import { useGetPaginatedProperties } from "../service/Property.query"
 import type { PropertyFilters } from "../service/Property.query"
+import type { PropertySearchParams } from "@/routes/listing/index"
 import { PropertyCard } from "./PropertyCard"
 import { PropertySkeleton } from "./PropertySkeleton"
 import { PropertyFilterSidebar } from "./PropertyFilterSidebar"
@@ -22,7 +23,7 @@ import {
 import { useState } from "react"
 
 interface PropertyListingProps {
-    filters: PropertyFilters & { page?: number; limit?: number };
+    filters: PropertySearchParams;
 }
 
 const PropertyListing = ({ filters }: PropertyListingProps) => {
@@ -33,7 +34,9 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
         beds: undefined,
         baths: undefined,
         type: "",
-        search: ""
+        search: "",
+        page: 1,
+        limit: 10
     };
     const [localFilters, setLocalFilters] = useState<PropertyFilters>(initialFilters);
 
@@ -51,19 +54,22 @@ const PropertyListing = ({ filters }: PropertyListingProps) => {
 
     const handleFilterChange = (newFilters: PropertyFilters) => {
         navigate({
-            search: { ...newFilters, page: 1, limit: pagination.limit } as any
+            to: '/listing',
+            search: { ...newFilters, page: 1, limit: pagination.limit }
         })
     }
 
     const handleLimitChange = (newLimit: number) => {
         navigate({
-            search: { ...filters, limit: newLimit, page: 1 } as any
+            to: '/listing',
+            search: { ...filters, limit: newLimit, page: 1 }
         })
     }
 
     const handlePageChange = (newPage: number) => {
         navigate({
-            search: { ...filters, page: newPage } as any
+            to: '/listing',
+            search: { ...filters, page: newPage, limit: filters.limit }
         })
     }
 

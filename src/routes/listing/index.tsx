@@ -4,16 +4,18 @@ import { z } from 'zod'
 
 const PropertyListing = React.lazy(() => import('@core/components/PropertyListing'))
 
-const propertyFiltersSchema = z.object({
-  minPrice: z.number().optional(),
-  maxPrice: z.number().optional(),
-  beds: z.number().optional(),
-  baths: z.number().optional(),
-  type: z.string().optional(),
-  search: z.string().optional(),
-  page: z.number().optional().default(1),
-  limit: z.number().optional().default(10),
+export const propertyFiltersSchema = z.object({
+  minPrice: z.coerce.number().positive().optional().catch(undefined),
+  maxPrice: z.coerce.number().positive().optional().catch(undefined),
+  beds: z.coerce.number().int().positive().optional().catch(undefined),
+  baths: z.coerce.number().int().positive().optional().catch(undefined),
+  type: z.enum(['APARTMENT', 'HOUSE', 'VILLA', '']).optional().catch(undefined),
+  search: z.string().optional().catch(undefined),
+  page: z.coerce.number().int().positive().optional().catch(1).default(1),
+  limit: z.coerce.number().int().positive().optional().catch(10).default(10),
 })
+
+export type PropertySearchParams = z.infer<typeof propertyFiltersSchema>
 
 export const Route = createFileRoute('/listing/')({
   validateSearch: (search) => propertyFiltersSchema.parse(search),

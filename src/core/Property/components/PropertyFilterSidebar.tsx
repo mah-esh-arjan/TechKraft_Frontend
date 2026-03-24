@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
@@ -32,7 +31,7 @@ export const PropertyFilterSidebar = ({ onApply, localFilters, setLocalFilters, 
 
 
     return (
-        <aside className="w-full lg:w-64 flex-shrink-0 space-y-8 pr-6">
+        <aside className="w-full lg:w-64 shrink-0 space-y-8 pr-6">
 
             <div className="relative group">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-3.5 text-slate-400 transition-colors group-focus-within:text-slate-900" />

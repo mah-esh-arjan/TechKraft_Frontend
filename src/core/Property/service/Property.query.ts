@@ -11,13 +11,17 @@ export interface PaginatedPropertyResponse {
     totalPages: number;
 }
 
+export type PropertyType = 'APARTMENT' | 'HOUSE' | 'VILLA' | '';
+
 export interface PropertyFilters {
     minPrice?: number;
     maxPrice?: number;
     beds?: number;
     baths?: number;
-    type?: string;
+    type?: PropertyType;
     search?: string;
+    page?: number;
+    limit?: number;
 }
 
 export interface PaginationParams {

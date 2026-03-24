@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
-import { Bed, Bath, Trees, MapPin, Calendar, User, Phone, Mail, ChevronLeft } from "lucide-react";
+import { Bed, Bath, Trees, MapPin, Calendar, User, Mail, ChevronLeft } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "@tanstack/react-router";
 import { AdminPropertyMeta } from "./AdminPropertyMeta";
@@ -69,7 +69,7 @@ export const PropertyDetail = () => {
                         className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105"
                     />
                 </AspectRatio>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-60 pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-900/40 via-transparent to-transparent opacity-60 pointer-events-none" />
                 <div className="absolute bottom-4 left-6 right-6 text-white">
                     <div className="flex items-baseline gap-2">
                         <span className="text-3xl font-extrabold tracking-tight">${property.price}</span>
@@ -183,7 +183,7 @@ const PropertyDetailSkeleton = () => {
                     <Skeleton className="h-5 w-20 rounded-full" />
                 </div>
             </div>
-            <Skeleton className="w-full aspect-[16/9] rounded-2xl" />
+            <Skeleton className="w-full aspect-video rounded-2xl" />
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
                 <div className="lg:col-span-3 space-y-6">
                     <div className="space-y-3">
